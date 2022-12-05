@@ -13,6 +13,8 @@ const upper = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 const numbers = "1234567890";
 const symbols = ",.!@#$%^&*";
 
+var db = new PouchDB("passwords");
+
 function handleClick(e) {
   const passwrd = document.querySelector("#password");
   navigator.clipboard.writeText(passwrd.value);
@@ -73,11 +75,17 @@ function updateParams(e) {
   }
 }
 
-var db = new PouchDB('passwords');
 async function savePass(pass) {
   let passes = await db.allDocs();
   let len = await passes.rows.length;
-  await db.put({_id: String(len+1), pass: pass, strength: strength()});
+  await db.put({ _id: String(len + 1), pass: pass, strength: strength() });
+}
+async function dumpAll() {
+  const all = (await db.allDocs()).rows;
+  all.forEach(async (pas) => {
+    let p = await db.get(pas.id);
+    console.log(`${p.pass} => ${p.strength}`);
+  });
 }
 
 async function generatePass() {
@@ -172,11 +180,49 @@ const App = () => {
         <label class="label input-group darker">
           <p>Strength</p>
           <span class="bars transparent">
-          <div id="strength">{strength()}</div>
-            <div class="box box-1" class={strength() == '' ? '' :(strength() == 'WEAK' ? 'weak' : (strength() == 'MEDIUM' ? 'medium' : 'strong'))}></div>
-            <div class="box box-1" class={strength() == '' || strength() == 'WEAK'? '' : (strength() == 'MEDIUM' ? 'medium' : 'strong')}></div>
-            <div class="box box-1" class={strength() == '' || strength() == 'WEAK'? '' : (strength() == 'MEDIUM' ? 'medium' : 'strong')}></div>
-            <div class="box box-1" class={strength() == '' || strength() == 'WEAK' || strength() == 'MEDIUM' ? '' : 'strong'}></div>
+            <div id="strength">{strength()}</div>
+            <div
+              class="box box-1"
+              class={
+                strength() == ""
+                  ? ""
+                  : strength() == "WEAK"
+                  ? "weak"
+                  : strength() == "MEDIUM"
+                  ? "medium"
+                  : "strong"
+              }
+            ></div>
+            <div
+              class="box box-1"
+              class={
+                strength() == "" || strength() == "WEAK"
+                  ? ""
+                  : strength() == "MEDIUM"
+                  ? "medium"
+                  : "strong"
+              }
+            ></div>
+            <div
+              class="box box-1"
+              class={
+                strength() == "" || strength() == "WEAK"
+                  ? ""
+                  : strength() == "MEDIUM"
+                  ? "medium"
+                  : "strong"
+              }
+            ></div>
+            <div
+              class="box box-1"
+              class={
+                strength() == "" ||
+                strength() == "WEAK" ||
+                strength() == "MEDIUM"
+                  ? ""
+                  : "strong"
+              }
+            ></div>
             <div></div>
           </span>
         </label>
@@ -190,6 +236,12 @@ const App = () => {
           </span>
         </button>
       </div>
+      <button
+        class="accent form-control center bottom"
+        onclick={async () => await dumpAll()}
+      >
+        All Passes (In Console)
+      </button>
     </div>
   );
 };

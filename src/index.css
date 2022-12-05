@@ -65,3 +65,7 @@ hr {
 .strong {
   background-color: green;
 }
+.bottom {
+  padding-left: 53px;
+  padding-right: 53px;
+}
