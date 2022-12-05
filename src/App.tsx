@@ -73,9 +73,20 @@ function updateParams(e) {
   }
 }
 
-function generatePass() {
-  setPass(genPass());
+var db = new PouchDB('passwords');
+async function savePass(pass) {
+  let passes = await db.allDocs();
+  let len = await passes.rows.length;
+  await db.put({_id: String(len+1), pass: pass, strength: strength()});
+}
+
+async function generatePass() {
+  let pass = genPass();
+  setPass(pass);
   passwordChanged();
+  if (pass.length > 0) {
+    await savePass(pass);
+  }
 }
 
 const App = () => {
@@ -172,7 +183,7 @@ const App = () => {
         <hr />
         <button
           class="accent form-control center"
-          onClick={() => generatePass()}
+          onClick={async () => await generatePass()}
         >
           <span>
             Generate <i class="fa fa-arrow-right"></i>
