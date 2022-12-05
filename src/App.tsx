@@ -90,8 +90,9 @@ const App = () => {
             id="password"
             type="text"
             disabled
+            placeholder="P4$5W0rD!"
             value={pass()}
-            class="input input-sm"
+            class="input input-sm disabled:placeholder-gray-400"
           />
           <button
             class="btn transparent btn-sm"
