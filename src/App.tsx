@@ -80,7 +80,7 @@ function generatePass() {
 
 const App = () => {
   return (
-    <div class="font-mono main">
+    <div class="main">
       <div class="transparent">
         <h1 style="text-align:center; padding:20px">Password Generator</h1>
       </div>
@@ -103,10 +103,11 @@ const App = () => {
         </label>
       </div>
       <div class="bg-neutral form-control">
+        <hr />
         <label class="input-group">
           <input
             id="count"
-            class="rounded-none range range-accent"
+            class="rounded-none range range-sm range-accent"
             type="range"
             value={count()}
             step="1"
@@ -116,6 +117,7 @@ const App = () => {
           />
           <span class="badge green transparent">{count()}</span>
         </label>
+        <hr />
         <label class="label cursor-pointer">
           <input
             type="checkbox"
@@ -155,6 +157,7 @@ const App = () => {
           />
           <span>Include Symbols</span>
         </label>
+        <hr />
         <label class="label input-group darker">
           <p>Strength</p>
           <span class="bars transparent">
@@ -166,6 +169,7 @@ const App = () => {
             <div></div>
           </span>
         </label>
+        <hr />
         <button
           class="accent form-control center"
           onClick={() => generatePass()}

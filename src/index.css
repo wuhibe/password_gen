@@ -11,6 +11,7 @@
 }
 hr {
   border-color: transparent;
+  height: 8px;
 }
 .form-control {
   margin: 10px;
