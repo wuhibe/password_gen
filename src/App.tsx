@@ -80,7 +80,7 @@ function generatePass() {
 
 const App = () => {
   return (
-    <div class="main">
+    <div class="font-mono main">
       <div class="transparent">
         <h1 style="text-align:center; padding:20px">Password Generator</h1>
       </div>
