@@ -16,17 +16,21 @@ Try it out.
 
 - Install dependencies
 
-```
+``` bash
 $ npm install
 ```
 
 - Run the project
 
-```
+``` bash
 $ npm run dev
 ```
 
 - Open project with browser
+
+## Author
+
+Wuhibeselassie Tamire [Medium](https://medium.com/@wuhibe/) / [LinkedIn](https://www.linkedin.com/in/wuhibeselassie-nigatu)
 
 ## Screenshots
 
