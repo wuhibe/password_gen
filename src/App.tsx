@@ -1,101 +1,96 @@
-import { createSignal } from "solid-js";
+import { createSignal } from 'solid-js';
 
-const [pass, setPass] = createSignal("");
+const [pass, setPass] = createSignal('');
 const [count, setCount] = createSignal(0);
 const [up, setUp] = createSignal(false);
 const [low, setLow] = createSignal(false);
 const [num, setNum] = createSignal(false);
 const [sym, setSym] = createSignal(false);
-const [strength, setStrength] = createSignal("");
+const [strength, setStrength] = createSignal('');
 
-const lower = "abcdefghijklmnopqrstuvwxyz";
-const upper = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-const numbers = "1234567890";
-const symbols = ",.!@#$%^&*";
+const lower = 'abcdefghijklmnopqrstuvwxyz';
+const upper = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+const numbers = '1234567890';
+const symbols = ',.!@#$%^&*';
 
-var db = new PouchDB("passwords");
+// @ts-ignore
+const db = new PouchDB('passwords');
 
-function handleClick(e) {
-  const passwrd = document.querySelector("#password");
+const handleClick = (e) => {
+  const passwrd = document.querySelector('#password');
   navigator.clipboard.writeText(passwrd.value);
-}
+};
 
-function passwordChanged() {
-  var strongRegex = new RegExp(
-    "^(?=.{14,})(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*\\W).*$",
-    "g"
-  );
-  var mediumRegex = new RegExp(
-    "^(?=.{10,})(((?=.*[A-Z])(?=.*[a-z]))|((?=.*[A-Z])(?=.*[0-9]))|((?=.*[a-z])(?=.*[0-9]))).*$",
-    "g"
-  );
-  var enoughRegex = new RegExp("(?=.{8,}).*", "g");
-  var pwd = document.getElementById("password");
-  if (pwd.value.length == 0 || false == enoughRegex.test(pwd.value)) {
-    setStrength("");
+const passwordChanged = () => {
+  const strongRegex = /^(?=.{14,})(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*\W).*$/g;
+  const mediumRegex = /^(?=.{10,})(((?=.*[A-Z])(?=.*[a-z]))|((?=.*[A-Z])(?=.*[0-9]))|((?=.*[a-z])(?=.*[0-9]))).*$/g;
+  const enoughRegex = /(?=.{8,}).*/g;
+  const pwd = document.getElementById('password');
+  if (pwd.value.length === 0 || enoughRegex.test(pwd.value) === false) {
+    setStrength('');
   } else if (strongRegex.test(pwd.value)) {
-    setStrength("STRONG");
+    setStrength('STRONG');
   } else if (mediumRegex.test(pwd.value)) {
-    setStrength("MEDIUM");
+    setStrength('MEDIUM');
   } else {
-    setStrength("WEAK");
+    setStrength('WEAK');
   }
-}
+};
 
-function genPass() {
+const genPass = () => {
   const letter =
-    (up() ? upper : "") +
-    (low() ? lower : "") +
-    (num() ? numbers : "") +
-    (sym() ? symbols : "");
-  let randomString = "";
-  for (let i = 0; i < count(); i++) {
+    (up() ? upper : '') +
+    (low() ? lower : '') +
+    (num() ? numbers : '') +
+    (sym() ? symbols : '');
+  let randomString = '';
+  for (let i = 0; i < count(); i += 1) {
     const randomStringNumber = Math.floor(
-      1 + Math.random() * (letter.length - 1)
+      1 + Math.random() * (letter.length - 1),
     );
     randomString += letter.substring(
       randomStringNumber,
-      randomStringNumber + 1
+      randomStringNumber + 1,
     );
   }
   return randomString;
-}
+};
 
-function updateParams(e) {
-  if (e.currentTarget.id == "count") {
+const updateParams = (e) => {
+  if (e.currentTarget.id === 'count') {
     setCount(e.currentTarget.value);
-  } else if (e.currentTarget.id == "uppercase") {
+  } else if (e.currentTarget.id === 'uppercase') {
     setUp(!up());
-  } else if (e.currentTarget.id == "lowercase") {
+  } else if (e.currentTarget.id === 'lowercase') {
     setLow(!low());
-  } else if (e.currentTarget.id == "numbers") {
+  } else if (e.currentTarget.id === 'numbers') {
     setNum(!num());
-  } else if (e.currentTarget.id == "symbols") {
+  } else if (e.currentTarget.id === 'symbols') {
     setSym(!sym());
   }
-}
+};
 
-async function savePass(pass) {
-  let passes = await db.allDocs();
-  let len = await passes.rows.length;
-  await db.put({ _id: String(len + 1), pass: pass, strength: strength() });
-}
-async function dumpAll() {
+const savePass = async (pass) => {
+  const passes = await db.allDocs();
+  const len = await passes.rows.length;
+  await db.put({ pass, _id: String(len + 1), strength: strength() });
+};
+const dumpAll = async () => {
   const all = (await db.allDocs()).rows;
   all.forEach(async (pas) => {
-    let p = await db.get(pas.id);
+    const p = await db.get(pas.id);
     console.log(`${p.pass} => ${p.strength}`);
   });
-}
+};
 
-async function generatePass() {
-  let pass = genPass();
+const generatePass = async () => {
+  const pass = genPass();
   setPass(pass);
   passwordChanged();
   if (pass.length > 0) {
     await savePass(pass);
   }
-}
+};
 
 const App = () => {
   return (
@@ -117,7 +112,7 @@ const App = () => {
             class="btn transparent btn-sm"
             onClick={(e) => handleClick(e)}
           >
-            <i class="green fa fa-files-o"></i>
+            <i class="green fa fa-files-o" />
           </button>
         </label>
       </div>
@@ -182,48 +177,44 @@ const App = () => {
           <span class="bars transparent">
             <div id="strength">{strength()}</div>
             <div
-              class="box box-1"
-              class={
-                strength() == ""
-                  ? ""
-                  : strength() == "WEAK"
-                  ? "weak"
-                  : strength() == "MEDIUM"
-                  ? "medium"
-                  : "strong"
-              }
-            ></div>
+              class={`box box-1 ${
+                strength() === ''
+                  ? ''
+                  : strength() === 'WEAK'
+                    ? 'weak'
+                    : strength() === 'MEDIUM'
+                      ? 'medium'
+                      : 'strong'
+              }`}
+            />
             <div
-              class="box box-1"
-              class={
-                strength() == "" || strength() == "WEAK"
-                  ? ""
-                  : strength() == "MEDIUM"
-                  ? "medium"
-                  : "strong"
-              }
-            ></div>
+              class={`box box-1 ${
+                strength() === '' || strength() === 'WEAK'
+                  ? ''
+                  : strength() === 'MEDIUM'
+                    ? 'medium'
+                    : 'strong'
+              }`}
+            />
             <div
-              class="box box-1"
-              class={
-                strength() == "" || strength() == "WEAK"
-                  ? ""
-                  : strength() == "MEDIUM"
-                  ? "medium"
-                  : "strong"
-              }
-            ></div>
+              class={`box box-1' ${
+                strength() === '' || strength() === 'WEAK'
+                  ? ''
+                  : strength() === 'MEDIUM'
+                    ? 'medium'
+                    : 'strong'
+              }`}
+            />
             <div
-              class="box box-1"
-              class={
-                strength() == "" ||
-                strength() == "WEAK" ||
-                strength() == "MEDIUM"
-                  ? ""
-                  : "strong"
-              }
-            ></div>
-            <div></div>
+              class={`box box-1 ${
+                strength() === '' ||
+                strength() === 'WEAK' ||
+                strength() === 'MEDIUM'
+                  ? ''
+                  : 'strong'
+              }`}
+            />
+            <div />
           </span>
         </label>
         <hr />
@@ -232,7 +223,7 @@ const App = () => {
           onClick={async () => await generatePass()}
         >
           <span>
-            Generate <i class="fa fa-arrow-right"></i>
+            Generate <i class="fa fa-arrow-right" />
           </span>
         </button>
       </div>
