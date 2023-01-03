@@ -29,6 +29,12 @@ hr {
   color: #a5ffb1;
   border: 1px solid #a5ffb1;
 }
+.checkboxes {
+  justify-content: left;
+}
+.checkboxes span {
+  padding-left: 20px;
+}
 .green {
   color: #a5ffb1;
 }
@@ -66,6 +72,5 @@ hr {
   background-color: green;
 }
 .bottom {
-  padding-left: 53px;
-  padding-right: 53px;
+  width: 380px
 }

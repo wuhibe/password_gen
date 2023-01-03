@@ -1,20 +1,12 @@
 body {
-  width: 100%;
-  height: max-content;
-  padding-top: 100px;
-  background: linear-gradient(0deg, #100f15ff 30%, #100f15dd);
-}
-#app {
-  margin: 10px;
-  padding: 10px 10px;
+  width: 100vw;
+  height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
-}
-.long {
-  height: 60px;
+  background: linear-gradient(0deg, #100f15ff 30%, #100f15dd);
 }
 .main {
-  width: 350px;
+  width: 400px;
   margin: 0 10;
 }

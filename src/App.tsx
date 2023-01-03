@@ -1,7 +1,7 @@
 import { createSignal } from 'solid-js';
 
 const [pass, setPass] = createSignal('');
-const [count, setCount] = createSignal(0);
+const [count, setCount] = createSignal(5);
 const [up, setUp] = createSignal(false);
 const [low, setLow] = createSignal(false);
 const [num, setNum] = createSignal(false);
@@ -117,7 +117,7 @@ const App = () => {
         </label>
       </div>
       <div class="bg-neutral form-control">
-        <hr />
+        <p style="padding:8px">Character Length</p>
         <label class="input-group">
           <input
             id="count"
@@ -132,7 +132,7 @@ const App = () => {
           <span class="badge green transparent">{count()}</span>
         </label>
         <hr />
-        <label class="label cursor-pointer">
+        <label class="label cursor-pointer checkboxes">
           <input
             type="checkbox"
             class="rounded-none checkbox checkbox-accent input-bordered"
@@ -142,7 +142,7 @@ const App = () => {
           <span>Include Uppercase Letters</span>
         </label>
 
-        <label class="label cursor-pointer">
+        <label class="label cursor-pointer checkboxes">
           <input
             type="checkbox"
             class="rounded-none checkbox checkbox-accent input-bordered"
@@ -152,7 +152,7 @@ const App = () => {
           <span>Include Lowercase Letters</span>
         </label>
 
-        <label class="label cursor-pointer">
+        <label class="label cursor-pointer checkboxes">
           <input
             type="checkbox"
             class="rounded-none checkbox checkbox-accent input-bordered"
@@ -162,7 +162,7 @@ const App = () => {
           <span>Include Numbers</span>
         </label>
 
-        <label class="label cursor-pointer">
+        <label class="label cursor-pointer checkboxes">
           <input
             type="checkbox"
             class="rounded-none checkbox checkbox-accent input-bordered"
